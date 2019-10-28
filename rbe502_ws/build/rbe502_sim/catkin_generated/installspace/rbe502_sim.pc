@@ -1,0 +1,8 @@
+prefix=/ifs/home/hksaperstein/Documents/git/rbe502/rbe502_ws/install
+
+Name: rbe502_sim
+Description: Description of rbe502_sim
+Version: 0.0.0
+Cflags: 
+Libs: -L/ifs/home/hksaperstein/Documents/git/rbe502/rbe502_ws/install/lib 
+Requires: 
