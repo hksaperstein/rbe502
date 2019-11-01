@@ -1,2 +1,0 @@
-rbe502_sim
--DCATKIN_DEVEL_PREFIX=/ifs/home/hksaperstein/Documents/git/rbe502/rbe502_ws/devel -DCMAKE_INSTALL_PREFIX=/ifs/home/hksaperstein/Documents/git/rbe502/rbe502_ws/install -G Unix Makefiles
