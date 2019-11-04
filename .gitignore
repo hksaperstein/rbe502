@@ -1,2 +1,6 @@
-# ignore extra MATLAB files
+# extra MATLAB files
 *.asv
+
+# extra ROS files
+**/build/*
+**/devel/*
