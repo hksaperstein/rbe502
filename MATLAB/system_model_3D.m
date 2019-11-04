@@ -36,6 +36,13 @@ G = subs(tau, {diff(theta(t), t, t), diff(phi_1(t), t, t), diff(phi_2(t), t, t),
 
 C = simplify(tau - M*{diff(theta,t,t); diff(phi_1,t,t); diff(phi_2,t,t)} - G);
 
+% syms x_1 x_2 x_3 x_4 x_5 x_6 tau_1 tau_2 tau_3
+% Tau = [tau_1; tau_2; tau_3];
+% dx = [x_4; x_5; x_6; inv(M)*(Tau-C-G)];
+% dx = simplify(dx);
+% dx = subs(dx, {diff(theta,t) diff(phi_1,t) diff(phi_2,t)}, {x_4 x_5 x_6});
+% dx = subs(dx, {theta phi_1 phi_2}, {x_1 x_2 x_3});
+
 function new_f=diffFunction(f,x)
     syms temp
     new_f = subs(f,x,temp);
