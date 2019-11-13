@@ -21,24 +21,57 @@
     <color rgba="0 0 0 1"/>
   </material>
 
-  <link name="base_link"> <!-- top_center_plate-->
+
+
+  <link name="world">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </link>
+  <link name="base_link"/>
+  <joint name="world_to_base" type="floating">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin rpy="${pi/2} 0 0"/>
+
+  </joint>
+
+
+  <!-- <link name="top_plate">
     <visual>
       <geometry>
         <mesh filename="package://rbe502_sim/meshes/BalanceRobot/CenterPlates.stl"/>
       </geometry>
+    </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <origin rpy="${pi/2} 0 0" xyz="0 0 5000"/>
+  </link>
+
+  <link name="battery">
+    <visual>
+      <geometry>
+        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Battery.stl"/>
+      </geometry>
+      <origin rpy="0 1.57075 0" xyz="0 260 0"/>
+    </visual>
+      <material name="black"/>
+  </link>
+
+  <link name="center_plate">
+    <visual>
+      <geometry>
+        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/CenterPlates.stl"/>
+      </geometry>
+      <origin xyz="0 -150.66 0" />
+    </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
       
-    </visual>
+    </inertial>
   </link>
-
-  <link name="mid_plate"> <!-- top_center_plate-->
-    <visual>
-      <geometry>
-        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/CenterPlates.stl"/>
-      </geometry>
-      <origin xyz="0 -150.66 0"/>
-    </visual>
-  </link>
-
+-->
   <link name="left_side_wall">
     <visual>
       <geometry>
@@ -46,6 +79,10 @@
       </geometry>
       <origin xyz="0 -146.44 58.6"/>
     </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
 
   <link name="right_side_wall">
@@ -55,54 +92,88 @@
       </geometry>
       <origin xyz="0 -146.44 -58.6"/>
     </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
 
-   <link name="left_motor_mount">
-     <visual>
-       <geometry>
-         <mesh filename="package://rbe502_sim/meshes/BalanceRobot/MotorMount.stl"/>
-       </geometry>
-       <origin xyz="0 -300 30.8"/>
-     </visual>
-   </link>
-
-   <link name="right_motor_mount">
-     <visual>
-       <geometry>
-         <mesh filename="package://rbe502_sim/meshes/BalanceRobot/MotorMount.stl"/>
-       </geometry>
-       <origin xyz="0 -300 -30.8" rpy="0 3.1415 0"/>
-     </visual>
-   </link>
-
-  <link name="left_motor">
+  <link name="left_motor_mount">
     <visual>
       <geometry>
-        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Stepper.stl"/>
+        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/MotorMount.stl"/>
       </geometry>
-      <material name="black"/>
-      <origin xyz="21 -305 18"/>
+      <!-- <origin xyz="0 -300 30.8" /> -->
     </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    
   </link>
 
-  <link name="right_motor">
+  <link name="right_motor_mount">
     <visual>
       <geometry>
-        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Stepper.stl"/>
+        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/MotorMount.stl"/>
+      </geometry>
+      <origin rpy="0 ${pi} 0"/>
+    </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link> 
+
+  <!-- <link name="left_motor">
+    <visual>
+      <geometry>
+        <mesh filename="package://rbe502_sim/meshes/BalanceRobotNew/Stepper.stl"/>
       </geometry>
       <material name="black"/>
-      <origin xyz="-21 -300 -18" rpy="0 3.1415 0"/>
+       <origin xyz="21 -305 18"/> 
+
     </visual>
-  </link>
+    <inertial>
+      <mass value="1"/> 
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>     
+    </inertial>
+  </link> -->
+
+  <!-- <link name="right_motor">
+    <visual>
+      <geometry>
+        <mesh filename="package://rbe502_sim/meshes/BalanceRobotNew/Stepper.stl"/>
+      </geometry>
+      <material name="black"/>
+       <origin xyz="-21 -300 -18" rpy="0 3.1415 0"/> 
+
+    </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link> -->
 
 
-  <link name="left_wheel">
+  <!-- <link name="left_wheel">
     <visual>
       <geometry>
         <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Wheel.stl"/>
       </geometry>
-      <origin xyz="0 -300 75"/>
+      <origin xyz="0 -300 65" />
+      
     </visual>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision>
+      <geometry>
+       <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Wheel.stl"/>
+      </geometry>
+    </collision>    </material>
+
   </link>
 
   <link name="right_wheel">
@@ -110,35 +181,23 @@
       <geometry>
         <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Wheel.stl"/>
       </geometry>
-      <origin xyz="0 -300 -75" rpy="0 3.1415 0"/>
+      <origin xyz="0 -300 -65" rpy="0 3.1415 0"/>
     </visual>
-  </link>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision>
+      <geometry>
+       <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Wheel.stl"/>
+      </geometry>
+    </collision>
+  </link> -->
 
-  
+    
 
 
-
-  <joint name="base_to_left_wall" type="fixed">
-    <parent link="base_link"/>
-    <child link="left_side_wall"/>
-  </joint>
-
-  <joint name="base_to_right_wall" type="fixed">
-    <parent link="base_link"/>
-    <child link="right_side_wall"/>
-  </joint>
-
-  <joint name="base_to_left_motor_mount" type="fixed">
-    <parent link="left_side_wall"/>
-    <child link="left_motor_mount"/>
-  </joint>
-
-  <joint name="base_to_right_motor_mount" type="fixed">
-    <parent link="right_side_wall"/>
-    <child link="right_motor_mount"/>
-  </joint>
-
-  <joint name="base_to_left_motor" type="fixed">
+  <!-- <joint name="base_to_left_motor" type="fixed">
     <parent link="base_link"/>
     <child link="left_motor"/>
   </joint>
@@ -146,15 +205,37 @@
   <joint name="base_to_right_motor" type="fixed">
     <parent link="base_link"/>
     <child link="right_motor"/>
+  </joint> -->
+
+   <joint name="left_motor_to_left_motor_mount" type="fixed">
+    <parent link="base_link"/>
+    <child link="left_motor_mount"/>
+    
   </joint>
 
-  <joint name="base_to_left_wheel" type="fixed">
+  <joint name="right_motor_to_right_motor" type="fixed">
     <parent link="base_link"/>
+    <child link="right_motor_mount"/>
+  </joint>
+
+
+  <joint name="left_motor_mount_to_left_wall" type="fixed">
+    <parent link="left_motor_mount"/>
+    <child link="left_side_wall"/>
+  </joint>
+
+  <joint name="right_motor_mount_to_right_wall" type="fixed">
+    <parent link="right_motor_mount"/>
+    <child link="right_side_wall"/>
+  </joint>
+<!--
+  <joint name="left_motor_to_left_wheel" type="fixed"> 
+    <parent link="left_motor"/>
     <child link="left_wheel"/>
   </joint>
 
-  <joint name="base_to_right_wheel" type="fixed">
-    <parent link="base_link"/>
+  <joint name="right_motor_to_right_wheel" type="fixed"> 
+    <parent link="right_motor"/>
     <child link="right_wheel"/>
   </joint>
 
@@ -162,41 +243,16 @@
     <parent link="base_link"/>
     <child link="mid_plate"/>
   </joint>
-
-
-
-  <!-- <joint name="right_wheel" type="continuous">
+  <joint name="base_to_top_plate" type="fixed">
     <parent link="base_link"/>
-    <child link="right_wheel"/>
-    <axis xyz="0 0 1"/>
-     <origin xyz="0 0 .3"/> 
+    <child link="top_plate"/>
   </joint> -->
 
-<!--
-  <link name="battery">
-    <visual>
-      <geometry>
-        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/Battery.stl"/>
-      </geometry>
-      <origin rpy="0 1.57075 0" xyz="0 260 0"/>
-    </visual>
-  </link>
-  <link name="top_center_plate">
-    <visual>
-      <geometry>
-        <mesh filename="package://rbe502_sim/meshes/BalanceRobot/CenterPlates.stl"/>
-      </geometry>
-    </visual>
-  </link>
-  <joint name="center_plate" type="fixed">
-    <parent link="left_side_wall"/>
-    <child link="center_plate"/>
-  </joint>
-  <joint name="battery" type="fixed">
-    <parent link="center_plate"/>
-    <child link="battery"/>
-  </joint>
-   -->
 
+ <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
 </robot>
 
