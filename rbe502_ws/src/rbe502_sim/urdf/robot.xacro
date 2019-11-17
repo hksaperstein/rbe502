@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-
-<xacro:macro name="wheel" params="suffix reflect parent">
-  <wheel suffix="${suffix}" reflect="${reflect}" parent="${parent}"/>
-</xacro:macro>
