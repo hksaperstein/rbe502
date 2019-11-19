@@ -1,15 +1,19 @@
 <?xml version="1.0" ?>
 <robot name="robot" xmlns:xacro="http://ros.org/wiki/xacro">
     <gazebo reference="left_wheel">
-        <material>
+      <mu1>1</mu1>
+      <mu2>1</mu2>        
+      <material>
             Gazebo/Black
         </material>
     </gazebo>
 
     <gazebo reference="right_wheel">
-        <material>
-            Gazebo/Black
-        </material>
+      <mu1>1</mu1>
+      <mu2>1</mu2>
+      <material>
+          Gazebo/Black
+      </material>
     </gazebo>
 
     <gazebo reference="imu_link">
