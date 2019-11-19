@@ -43,15 +43,15 @@ rosinit;
 vels = rospublisher('/cmd_vel','geometry_msgs/Twist');
 wheelVel = rosmessage('geometry_msgs/Twist');
 IMUSub = rossubscriber('/imu');
-VelSub = rossubscriber('/body_vel'); %this is currently broken till harry adds the publisher
+VelSub = rossubscriber('/joint_states'); %this is currently broken till harry adds the publisher
 
 Veldata = receive(VelSub); % 10 is the timeout in s, yes this is blocking...
 
 IMUdata = receive(IMUSub);
 
 %  process things here
-WheelVel.Linear.X = 0.1; % replace with the velocity for the wheels from maths
-send(vels,WheelVel);
+wheelVel.Linear.X = 0.1; % replace with the velocity for the wheels from maths
+send(vels,wheelVel);
 
 
 rosshutdown
