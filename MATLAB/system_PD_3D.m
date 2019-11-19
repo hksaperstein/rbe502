@@ -6,8 +6,8 @@ close all
 global m m_w I I_w h r g q_d dq_d K_p K_d torque
 torque = [];
 g = 9.8;
-m = 1; m_w = 0.1; h = 0.25; r = 0.04;
-I = (1/3)*m*(2*h)^2; I_w = 2*(1/2)*m_w*r^2; 
+m = 1.51518; m_w = 0.053337; h = 0.057794; r = 0.04445;
+I = 0.02054; I_w = 0.00004896; 
 K_p = 100*eye(3);
 K_d = 10*eye(3);
 q_d = [0;1;1];
