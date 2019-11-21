@@ -15,6 +15,33 @@ K_d = 10*eye(3);
 q_d = [0;0;0];
 dq_d = [0;0;0];
 
+% ROS Setup
+rosinit;
+vels = rospublisher('/cmd_vel','geometry_msgs/Twist');
+wheelVel = rosmessage('geometry_msgs/Twist');
+IMUSub = rossubscriber('/imu');
+VelSub = rossubscriber('/joint_states'); %this is currently broken till harry adds the publisher
+
+
+while(1)
+    % Get new state data from ROS
+    Veldata = receive(VelSub); % 10 is the timeout in s, yes this is blocking...
+    IMUdata = receive(IMUSub);
+    
+    %Build up state vector
+    x = zeros(6,1);
+    % x(1) = ...
+    % somehow get an angle out of this... Kalman?
+    
+    % Call the ODE function
+    % this applies the state-space model
+    dx = ODE(x);
+    
+    % use wheel speeds from dx to calculate linear x and angular z
+    
+    %wheelVel.Linear.X = 0.1;
+end
+
 % call this function with the state and it will
 % give back the derivative of state (which includes wheel speeds)
 function dx = ODE(x)
