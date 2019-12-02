@@ -5,24 +5,24 @@ clear all
 close all
 
 % q(t) = [theta; phi];
-syms m m_w I I_w l r g phi(t) theta(t)
+syms m m_w I I_w h r g phi(t) theta(t)
 
-x_m = r*phi - l*sin(theta); % x - l*sin(theta)
-y_m = r + l*cos(theta);
+x_m = r*phi + h*sin(theta);
+y_m = h*cos(theta);
 dx_m = diff(x_m, t);
 dy_m = diff(y_m, t);
 v_m_sqr = dx_m^2 + dy_m^2;
 
 K_m = 0.5*m*v_m_sqr + 0.5*I*(diff(theta,t)^2);
-K_w = 0.5*m_w*(r^2)*(diff(phi,t)^2) + 0.5*I_w*(diff(phi,t)^2);
+K_w = 0.5*m_w*(r*diff(phi,t))^2 + 0.5*I_w*(diff(phi,t)^2);
 
-P = m*g*l*cos(theta);
+P = m*g*h*cos(theta);
 
-L = K_m + K_w - P;
-% tau is the generalized joint torques
-% its two components will be equal and oposite
+L = K_m + (2*K_w) - P;
+
 tau(1,1) = diff(diffFunction(L, diff(theta, t)), t) - diffFunction(L, theta);
-tau(2,1) = diff(diffFunction(L, diff(phi,   t)), t) - diffFunction(L, phi);
+tau(2,1) = diff(diffFunction(L, diff(phi, t)), t) - diffFunction(L, phi);
+tau = simplify(tau);
 
 M11 = simplify(tau(1) - subs(tau(1),diff(theta(t), t, t),0)) / diff(theta(t), t, t);
 M12 = simplify(tau(1) - subs(tau(1),diff(phi(t), t, t), 0)) / diff(phi(t), t, t);
