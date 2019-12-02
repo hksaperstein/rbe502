@@ -7,24 +7,42 @@ torque = [];
 g = 9.8;
 m = 1.51518; m_w = 0.053337; h = 0.057794; r = 0.04445;
 I = 0.02054; I_w = 0.00004896;
-K_p = [10 0; 0 10];
-K_d = [10 0; 0 10];
+kp = 15;
+kd = 5;
+K_p = [ kp 0;
+       -kp 0];
+K_d = [ kd 0;
+       -kd 0];
 q_d = [0;0];
 dq_d = [0;0];
-q_0 = [pi/3;0];
+q_0 = [pi/6;0];
 dq_0 = [0;0];
 X0 = [q_0; dq_0];
-[T,X] = ode45(@(t,x)ODE(t,x), [0 10], X0);
+tf = 4;
+[T,X] = ode45(@(t,x)ODE(t,x), [0 tf], X0);
+
+subplot(2,1,1);
 plot(T,X(:,1),T,X(:,2));
-legend({'theta','phi'});
+title('Tilt angle (\theta) and wheel angle (\phi) vs time');
+legend({'\theta','\phi'});
+ylabel('\theta, \phi [rad]');
+
+subplot(2,1,2);
+plot(torque(1,:), torque(2,:), 'r-');
+hold on
+plot(torque(1,:), torque(3,:), 'b-');
+title('Torques vs time');
+legend({'\tau_{\theta}', '\tau_{\phi}'});
+ylabel('\tau_{\theta,\phi} [Nm]');
+xlabel('time [s]');
 
 function dx = ODE(t,x)
-    %global torque
+    global torque
     [M,C,G] = MCG(x);
     dx(1:2,1) = x(3:4);
     tau = PD_control(x,G);
-    %torque = [torque tau];
-    dx(3:4,1) = M\([tau(1); tau(1)] - C - G);
+    torque = [torque [t; tau]];
+    dx(3:4,1) = M\(tau - C - G);
 end
 
 % helper functions
