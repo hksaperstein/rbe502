@@ -24,15 +24,15 @@ IMUdata = 0;
 % ROS Setup
 rosinit;
 vels = rospublisher('/cmd_vel','geometry_msgs/Twist');
-IMUSub = rossubscriber('/imu', @updateIMU);
-VelSub = rossubscriber('/joint_states',@updateVel);
-while(IMUdata == 0)
-    pause(0.1);
-end
-while(Veldata == 0)
-    pause(0.1);
-end
-disp(IMUdata)
+IMUSub = rossubscriber('/imu');
+VelSub = rossubscriber('/joint_states');
+% while(IMUdata == 0)
+%     pause(0.1);
+% end
+% while(Veldata == 0)
+%     pause(0.1);
+% end
+IMUdata = receive(IMUSub);
 qy = IMUdata.Orientation.Y;
 qw = IMUdata.Orientation.W;
 old_theta = 2*atan2(qy,qw)*180/pi;
@@ -46,8 +46,8 @@ while(1)
     dt = t - old_t;
     old_t = t;
     % Get new state data from ROS
-    %Veldata = receive(VelSub); % 10 is the timeout in s, yes this is blocking...
-    %IMUdata = receive(IMUSub);
+    Veldata = receive(VelSub); % 10 is the timeout in s, yes this is blocking...
+    IMUdata = receive(IMUSub);
     qy = IMUdata.Orientation.Y;
     qw = IMUdata.Orientation.W;
     theta = 2*atan2(qy,qw)*180/pi;
