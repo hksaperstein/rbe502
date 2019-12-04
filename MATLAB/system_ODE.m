@@ -7,8 +7,9 @@ g = 9.8;
 m = 1.51518; m_w = 0.053337; h = 0.057794; r = 0.04445;
 I = 0.02054; I_w = 0.00004896;
 
-kp = 2;
-kd = 0;
+kp = 0.05
+;
+kd = 0.06;
 K_p = [ kp 0;
        -kp 0];
 K_d = [ kd 0;
@@ -35,7 +36,7 @@ VelSub = rossubscriber('/joint_states');
 IMUdata = receive(IMUSub);
 qy = IMUdata.Orientation.Y;
 qw = IMUdata.Orientation.W;
-old_theta = 2*atan2(qy,qw)*180/pi;
+old_theta = 2*atan2(qy,qw);
 tic;
 old_t = toc;
 old_phi_1 = 0;
@@ -46,11 +47,11 @@ while(1)
     dt = t - old_t;
     old_t = t;
     % Get new state data from ROS
-    Veldata = receive(VelSub); % 10 is the timeout in s, yes this is blocking...
+    Veldata = receive(VelSub);
     IMUdata = receive(IMUSub);
     qy = IMUdata.Orientation.Y;
     qw = IMUdata.Orientation.W;
-    theta = 2*atan2(qy,qw)*180/pi;
+    theta = 2*atan2(qy,qw);
     
     dphi_1 = (Veldata.Position(2) - old_phi_1)/dt;
     dphi_2 = (Veldata.Position(1) - old_phi_2)/dt;
@@ -107,12 +108,12 @@ function tau = PD_control(x, G)
     tau = K_p*(q_d - x(1:2)) + K_d*(dq_d - x(3:4)) + G;
 end
 
-function updateVel(~, Veldata_in, ~)
-    global Veldata
-    Veldata = Veldata_in;
-end
-
-function updateIMU(~, IMUdata_in, ~)
-    global IMUdata
-    IMUdata = IMUdata_in;
-end
+% function updateVel(~, Veldata_in, ~)
+%     global Veldata
+%     Veldata = Veldata_in;
+% end
+% 
+% function updateIMU(~, IMUdata_in, ~)
+%     global IMUdata
+%     IMUdata = IMUdata_in;
+% end
