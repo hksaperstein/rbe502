@@ -2,26 +2,17 @@ clc
 clear all
 close all
 
-global m m_w I I_w h r g q_d dq_d K_p K_d
+global m m_w I I_w h r g q_d dq_d i_term
 g = 9.8;
 m = 1.51518; m_w = 0.053337; h = 0.057794; r = 0.04445;
 I = 0.02054; I_w = 0.00004896;
-
-kp = 0.05
-;
-kd = 0.06;
-K_p = [ kp 0;
-       -kp 0];
-K_d = [ kd 0;
-       -kd 0];
 
 % desired state
 q_d = [0;0];
 dq_d = [0;0];
 
-global Veldata IMUdata
-Veldata = 0;
-IMUdata = 0;
+i_term = 0.0; % accumulator for I term of PID
+
 % ROS Setup
 rosinit;
 vels = rospublisher('/cmd_vel','geometry_msgs/Twist');
@@ -62,12 +53,13 @@ while(1)
     %Build up state vector
     x = zeros(4,1);
     x(1) = theta;
+    x(2) = (Veldata.Position(2) + Veldata.Position(1))/2;
     x(3) = (theta - old_theta)/dt;
     x(4) = dphi;
     
     % Call the ODE function
     % this applies the state-space model
-    dx = ODE(x);
+    dx = ODE(x,dt);
     
     new_x = dx*dt + x;
     
@@ -79,11 +71,12 @@ end
 
 % call this function with the state and it will
 % give back the derivative of state (which includes wheel speeds)
-function dx = ODE(x)
+function dx = ODE(x,dt)
     %global torque
     [M,C,G] = MCG(x);
     dx(1:2,1) = x(3:4);
-    tau = PD_control(x,G);
+%     tau = PD_control(x,G);
+    tau = PID_control(x,dt);
     %torque = [torque [t; tau]];
     dx(3:4,1) = M\(tau - C - G);
 end
@@ -104,8 +97,33 @@ function [M,C,G] = MCG(x)
 end
 
 function tau = PD_control(x, G)
-    global K_p K_d q_d dq_d
+    global q_d dq_d
+    kp = 0.05;
+    kd = 0.06;
+    K_p = [ kp 0;
+           -kp 0];
+    K_d = [ kd 0;
+           -kd 0];
     tau = K_p*(q_d - x(1:2)) + K_d*(dq_d - x(3:4)) + G;
+end
+
+function tau = PID_control(x,dt)
+    global q_d dq_d i_term
+    kp = 0.05;
+    kd = 0.06;
+    ki = 0.02;
+%     K_p = [kp 0;
+%           -kp 0];
+%     K_d = [kd 0;
+%            0 kd];
+%     K_i = [ki 0;
+%           -ki 0];
+     e = q_d - x(1:2);
+%     de = dq_d - x(3:4);
+    i_term = (i_term + e)*dt;
+%     tau = K_p*e + K_d*de + K_i*i_term
+    tau_0 = kp*(q_d(1)-x(1)) + kd*(dq_d(1)-x(3));% + ki*i_term(1);
+    tau = [tau_0; -tau_0];
 end
 
 % function updateVel(~, Veldata_in, ~)
