@@ -18,12 +18,7 @@ rosinit;
 vels = rospublisher('/cmd_vel','geometry_msgs/Twist');
 IMUSub = rossubscriber('/imu');
 VelSub = rossubscriber('/joint_states');
-% while(IMUdata == 0)
-%     pause(0.1);
-% end
-% while(Veldata == 0)
-%     pause(0.1);
-% end
+
 IMUdata = receive(IMUSub);
 qy = IMUdata.Orientation.Y;
 qw = IMUdata.Orientation.W;
@@ -56,6 +51,8 @@ while(1)
     x(2) = (Veldata.Position(2) + Veldata.Position(1))/2;
     x(3) = (theta - old_theta)/dt;
     x(4) = dphi;
+    
+    old_theta = theta;
     
     % Call the ODE function
     % this applies the state-space model
@@ -111,8 +108,8 @@ end
 
 function dphi = PID_control(x,dt)
     global q_d dq_d i_term
-    kp = 60;
-    kd = 25;
+    kp = 55;
+    kd = 5;
     ki = 0.02;
 %     K_p = [kp 0;
 %           -kp 0];
@@ -124,7 +121,7 @@ function dphi = PID_control(x,dt)
 %     de = dq_d - x(3:4);
     i_term = (i_term + e)*dt;
 %     tau = K_p*e + K_d*de + K_i*i_term
-    dphi = kp*(q_d(1)-x(1))% + kd*(dq_d(1)-x(3))% + ki*i_term(1)
+    dphi = kp*(q_d(1)-x(1)) + kd*(dq_d(1)-x(3))% + ki*i_term(1)
     %tau = [tau_0; -tau_0];
 end
 
