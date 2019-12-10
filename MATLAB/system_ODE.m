@@ -50,6 +50,8 @@ while(1)
     old_phi_1 = Veldata.Position(2);
     old_phi_2 = Veldata.Position(1);
     
+    old_theta = theta;
+    
     %Build up state vector
     x = zeros(4,1);
     x(1) = theta;
