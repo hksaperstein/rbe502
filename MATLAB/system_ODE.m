@@ -2,10 +2,13 @@ clc
 clear all
 close all
 
-global m m_w I I_w h r g q_d dq_d i_term
+global m m_w I I_w h r g q_d dq_d i_term K
 g = 9.8;
 m = 1.51518; m_w = 0.053337; h = 0.057794; r = 0.04445;
 I = 0.02054; I_w = 0.00004896;
+
+K = [317.0870    0.0839   31.8784    0.0389;
+      -0.2653  100.0000    0.0122   31.6332];
 
 % desired state
 q_d = [0;0];
@@ -60,7 +63,7 @@ while(1)
     
     %new_x = dx*dt + x;
     
-    dphi = -PID_control(x, dt);
+    dphi = -K*x;
     
     % use wheel speeds from dx to calculate linear x and angular z
     wheelVel = rosmessage('geometry_msgs/Twist');
