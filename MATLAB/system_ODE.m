@@ -18,12 +18,7 @@ rosinit;
 vels = rospublisher('/cmd_vel','geometry_msgs/Twist');
 IMUSub = rossubscriber('/imu');
 VelSub = rossubscriber('/joint_states');
-% while(IMUdata == 0)
-%     pause(0.1);
-% end
-% while(Veldata == 0)
-%     pause(0.1);
-% end
+
 IMUdata = receive(IMUSub);
 qy = IMUdata.Orientation.Y;
 qw = IMUdata.Orientation.W;
@@ -59,15 +54,19 @@ while(1)
     x(3) = (theta - old_theta)/dt;
     x(4) = dphi;
     
+    old_theta = theta;
+    
     % Call the ODE function
     % this applies the state-space model
-    dx = ODE(x,dt);
+    %dx = ODE(x,dt);
     
-    new_x = dx*dt + x;
+    %new_x = dx*dt + x;
+    
+    dphi = -PID_control(x, dt);
     
     % use wheel speeds from dx to calculate linear x and angular z
     wheelVel = rosmessage('geometry_msgs/Twist');
-    wheelVel.Linear.X = r*new_x(4);
+    wheelVel.Linear.X = r*dphi;
     send(vels,wheelVel);
 end
 
@@ -109,10 +108,10 @@ function tau = PD_control(x, G)
     tau = K_p*(q_d - x(1:2)) + K_d*(dq_d - x(3:4)) + G;
 end
 
-function tau = PID_control(x,dt)
+function dphi = PID_control(x,dt)
     global q_d dq_d i_term
-    kp = 0.03005;
-    kd = 0.0009;
+    kp = 55;
+    kd = 5;
     ki = 0.02;
 %     K_p = [kp 0;
 %           -kp 0];
@@ -124,8 +123,8 @@ function tau = PID_control(x,dt)
 %     de = dq_d - x(3:4);
     i_term = (i_term + e)*dt;
 %     tau = K_p*e + K_d*de + K_i*i_term
-    tau_0 = kp*(q_d(1)-x(1)) + kd*(dq_d(1)-x(3)) + ki*i_term(1)
-    tau = [tau_0; -tau_0];
+    dphi = kp*(q_d(1)-x(1)) + kd*(dq_d(1)-x(3))% + ki*i_term(1)
+    %tau = [tau_0; -tau_0];
 end
 
 % function updateVel(~, Veldata_in, ~)
